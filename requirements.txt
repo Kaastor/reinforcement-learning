@@ -1,0 +1,7 @@
+numpy
+pandas
+tensorflow
+torch
+ray[rllib]
+cufflinks
+plotly
