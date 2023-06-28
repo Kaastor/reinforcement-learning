@@ -5,3 +5,7 @@ torch
 ray[rllib]
 cufflinks
 plotly
+gym
+python-binance
+stable_baselines3
+stable-baselines3[extra]
