@@ -4,7 +4,50 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 
 ## Project Overview
-[Description]
+
+Goal: build and **understand** core TD ideas by implementing them cleanly (no heavy frameworks), tied directly to the math and to the notation of **Sutton & Barto (2nd ed., 2018)**. By the end you’ll be comfortable with TD(0) for policy evaluation, on-policy control (SARSA), off-policy control (Q-learning) all on tiny, transparent environments.
+---
+
+### Learning outcomes
+
+* Read and write updates in **Sutton & Barto notation**: $S_t, A_t, R_{t+1}, V(s), Q(s,a), \alpha, \gamma, \pi(a\mid s), \delta_t, G_t$.
+* Derive and implement core TD updates correctly:
+
+  * **TD(0) policy evaluation**: $ \delta_t = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)$,
+    $V(S_t) \leftarrow V(S_t) + \alpha\,\delta_t$.
+  * **SARSA(0)** (on-policy control):
+    $\delta_t = R_{t+1} + \gamma Q(S_{t+1},A_{t+1}) - Q(S_t,A_t)$,
+    $Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha\,\delta_t$.
+  * **Q-learning** (off-policy control):
+    $\delta_t = R_{t+1} + \gamma \max_a Q(S_{t+1},a) - Q(S_t,A_t)$,
+    $Q(S_t,A_t) \leftarrow Q(S_t,A_t) + \alpha\,\delta_t$.
+* Compare TD vs Monte Carlo via **bias-variance** trade-off and **online bootstrapping**.
+* Cross-check your results against a **ground-truth value function** computed by solving the Bellman equations.
+
+**Primary theory references:** Sutton & Barto, *Reinforcement Learning: An Introduction* (2nd ed.), Chapter 6 (TD Learning), plus Chapter 3–4 (MDPs, DP/MC background). Keep the book open—your code will cite the exact symbols used there.
+
+### Scope & milestones (8–12 hours total, focused learning)
+
+1. **Foundations (MDP + Notation warm-up)**
+
+   * Short markdown notes: states $\mathcal{S}$, actions $\mathcal{A}$, rewards, transitions $p(s',r\mid s,a)$, returns $G_t$, policies $\pi$.
+   * Tiny helper to sample episodes under a fixed policy $\pi$.
+
+2. **Environment 1 — 1D Random Walk (policy evaluation)**
+
+   * Classic **five-state random walk** (nonterminal states $\{A,B,C,D,E\}$, terminals at left/right).
+     Actions: Left/Right; $\gamma=1$; reward $0$ until right terminal gives $+1$ (left terminal $0$).
+     Use a **fixed policy** (e.g., equiprobable Left/Right).
+   * Implement **TD(0)** to estimate $V^\pi$.
+   * Compute **ground truth** $v^\pi$ by solving $v = r^\pi + \gamma P^\pi v$ ⇒ $v=(I-\gamma P^\pi)^{-1} r^\pi$.
+   * Plot MSE$(V - v^\pi)$ across sweeps; compare **MC** vs **TD(0)**.
+
+3. **Environment 2 — 4×4 Gridworld (control)**
+
+   * Deterministic grid, start at top-left, goal at bottom-right; reward $-1$ per step, $0$ at goal; episode terminates at goal or max steps; $\gamma=1$.
+   * Implement **ε-greedy** $\pi$ over $Q$ with linear decay of $\epsilon$.
+   * Compare **SARSA(0)** vs **Q-learning** on average return and steps-to-goal over episodes.
+
 
 ## Build & Test Commands
 
