@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Goal: build and **understand** core TD ideas by implementing them cleanly (no heavy frameworks), tied directly to the math and to the notation of **Sutton & Barto (2nd ed., 2018)**. By the end you’ll be comfortable with TD(0) for policy evaluation, on-policy control (SARSA), off-policy control (Q-learning) all on tiny, transparent environments.
+
+For environment implementation use chosen env from Gymnasium.
 ---
 
 ### Learning outcomes
@@ -65,6 +67,31 @@ Goal: build and **understand** core TD ideas by implementing them cleanly (no he
 ## Project Structure
 
 ```
+td_learning/
+├── envs/
+│   ├── __init__.py
+│   ├── random_walk.py      # 5-state random walk
+│   └── gridworld.py        # 4x4 gridworld
+├── agents/
+│   ├── __init__.py
+│   ├── base.py            # Abstract agent
+│   ├── td_zero.py         # TD(0) policy evaluation
+│   ├── monte_carlo.py     # MC baseline
+│   ├── sarsa.py           # On-policy control
+│   ├── q_learning.py      # Off-policy control
+│   └── utils.py           # ε-greedy, decay schedules
+├── math/
+│   ├── __init__.py
+│   ├── bellman.py         # Ground truth solvers
+│   └── returns.py         # Return calculations
+├── experiments/
+│   ├── __init__.py
+│   ├── policy_evaluation.py
+│   └── control_comparison.py
+└── tests/
+    ├── test_envs.py
+    ├── test_agents.py
+    └── test_math.py
 ```
 
 ## Technical Stack
@@ -78,7 +105,18 @@ Goal: build and **understand** core TD ideas by implementing them cleanly (no he
 
 ### Dependencies
 
-[List of deps]
+```toml
+# Core mathematical operations & RL
+numpy = "^1.24.0"              # Efficient array operations, linear algebra
+matplotlib = "^3.7.0"          # Plotting TD convergence, MSE comparison  
+gymnasium = "^0.29.0"          # Lightweight RL environments
+scipy = "^1.11.0"              # Linear system solving for ground truth
+
+# Development & analysis
+jupyter = "^1.0.0"             # Interactive development/visualization
+pytest = "^8.0.0"              # Testing framework
+python-dotenv = "^1.0.0"       # Configuration management
+```
 
 ## Code Style Guidelines
 
@@ -130,3 +168,63 @@ Goal: build and **understand** core TD ideas by implementing them cleanly (no he
 - Around 5 min per cycle
 - Keep tests simple, just core functionality checks
 - Prioritize working code over perfection for POCs
+
+## Implementation Plan
+
+### Phase 1: Foundations (2-3 iterations, ~2 hours)
+**Iteration 1.1**: MDP Core Components
+- `mdp/core.py`: Basic MDP classes (State, Action, Transition)
+- `mdp/policy.py`: Policy representation and sampling
+- Basic episode generation helper
+
+**Iteration 1.2**: Mathematical Foundations  
+- `math/bellman.py`: Ground truth value function solver
+- `math/returns.py`: Return calculation utilities
+- Unit tests for core math operations
+
+**Iteration 1.3**: Base Agent Framework
+- `agents/base.py`: Abstract base agent class
+- `agents/utils.py`: Common utilities (ε-greedy, logging)
+
+### Phase 2: Policy Evaluation - Random Walk (3-4 iterations, ~3 hours)
+**Iteration 2.1**: Environment Setup
+- `envs/random_walk.py`: 5-state random walk implementation
+- Environment validation and visualization
+
+**Iteration 2.2**: TD(0) Implementation
+- `agents/td_zero.py`: TD(0) policy evaluation agent
+- Basic learning loop and value function updates
+
+**Iteration 2.3**: Monte Carlo Baseline
+- `agents/monte_carlo.py`: MC policy evaluation for comparison
+- Episode-based value function estimation
+
+**Iteration 2.4**: Evaluation & Comparison
+- `experiments/policy_evaluation.py`: Run TD vs MC experiments
+- MSE plotting and convergence analysis
+
+### Phase 3: Control - Gridworld (3-4 iterations, ~3 hours)  
+**Iteration 3.1**: Gridworld Environment
+- `envs/gridworld.py`: 4x4 deterministic grid implementation
+- State representation and action spaces
+
+**Iteration 3.2**: SARSA Implementation
+- `agents/sarsa.py`: On-policy SARSA(0) control
+- ε-greedy policy with decay
+
+**Iteration 3.3**: Q-Learning Implementation  
+- `agents/q_learning.py`: Off-policy Q-learning control
+- Action-value function updates
+
+**Iteration 3.4**: Control Comparison
+- `experiments/control_comparison.py`: SARSA vs Q-learning
+- Performance metrics and learning curves
+
+### Phase 4: Analysis & Validation (1-2 iterations, ~2 hours)
+**Iteration 4.1**: Ground Truth Validation
+- Implement analytical solutions for both environments
+- Cross-validation of learned vs theoretical values
+
+**Iteration 4.2**: Final Analysis
+- Comprehensive comparison plots
+- Bias-variance analysis documentation
