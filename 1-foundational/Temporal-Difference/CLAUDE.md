@@ -64,50 +64,81 @@ For environment implementation use chosen env from Gymnasium.
 `poetry run python -m pytest app/tests/test_app.py::test_hello_name -v`
 
 
-## Project Structure
+## Current Implementation Status
 
-**Current Implementation Status:**
-- ✅ Phase 1: Foundations (Complete)
-- ✅ Phase 2: Policy Evaluation - Random Walk (Complete) 
-- ⏳ Phase 3: Control - Gridworld (Pending)
-- ⏳ Phase 4: Analysis & Validation (Pending)
+**Phases Complete**: 2/4 (Foundation + Policy Evaluation)  
+**Test Coverage**: 29 passing tests  
+**Lines of Code**: ~2000+ lines of clean, well-documented code
+
+## Project Structure
 
 ```
 td_learning/
 ├── envs/
-│   ├── __init__.py
-│   ├── random_walk.py      # ✅ 5-state random walk (complete)
-│   └── gridworld.py        # ⏳ 4x4 gridworld (pending)
+│   ├── __init__.py         ✅ Environment package
+│   ├── random_walk.py      ✅ 5-state random walk (Sutton & Barto Ex 6.2)
+│   └── gridworld.py        ⏳ 4x4 gridworld (Phase 3)
 ├── agents/
-│   ├── __init__.py
-│   ├── base.py            # ✅ Abstract agent classes (complete)
-│   ├── td_zero.py         # ✅ TD(0) policy evaluation (complete)
-│   ├── monte_carlo.py     # ✅ MC baseline (complete)
-│   ├── sarsa.py           # ⏳ On-policy control (pending)
-│   ├── q_learning.py      # ⏳ Off-policy control (pending)
-│   └── utils.py           # ✅ ε-greedy, decay schedules (complete)
+│   ├── __init__.py         ✅ Agent package  
+│   ├── base.py            ✅ Abstract agent classes
+│   ├── td_zero.py         ✅ TD(0) policy evaluation
+│   ├── monte_carlo.py     ✅ MC policy evaluation baseline
+│   ├── sarsa.py           ⏳ On-policy control (Phase 3)
+│   ├── q_learning.py      ⏳ Off-policy control (Phase 3)
+│   └── utils.py           ✅ ε-greedy, decay schedules
 ├── mdp/
-│   ├── __init__.py
-│   ├── core.py            # ✅ MDP framework (complete)
-│   └── policy.py          # ✅ Policy classes (complete)
-├── td_math/               # Renamed from 'math' to avoid conflicts
-│   ├── __init__.py
-│   ├── bellman.py         # ✅ Ground truth solvers (complete)
-│   └── returns.py         # ✅ Return calculations (complete)
+│   ├── __init__.py         ✅ MDP package
+│   ├── core.py            ✅ State, Action, Transition classes
+│   └── policy.py          ✅ Policy representation & sampling
+├── td_math/
+│   ├── __init__.py         ✅ Math utilities package
+│   ├── bellman.py         ✅ Ground truth value solvers
+│   └── returns.py         ✅ Return calculations (TD error, MC returns)
 ├── experiments/
-│   ├── __init__.py
-│   ├── policy_evaluation.py # ✅ TD vs MC experiments (complete)
-│   ├── plotting.py        # ✅ ASCII visualization utils (complete)
-│   └── control_comparison.py # ⏳ SARSA vs Q-learning (pending)
+│   ├── __init__.py         ✅ Experiment framework package
+│   ├── policy_evaluation.py ✅ TD vs MC comparison experiments
+│   ├── plotting.py         ✅ ASCII visualization utilities
+│   └── control_comparison.py ⏳ SARSA vs Q-learning (Phase 3)
 ├── tests/
-│   ├── test_envs.py       # ✅ Environment tests (complete)
-│   ├── test_agents_td.py  # ✅ TD/MC agent tests (complete)
-│   ├── test_agents_utils.py # ✅ Agent utility tests (complete)
-│   ├── test_experiments.py # ✅ Experiment tests (complete)
-│   ├── test_math_returns.py # ✅ Return calculation tests (complete)
-│   └── test_mdp_core.py   # ✅ MDP core tests (complete)
-├── demo.py               # ✅ Working demo script
-└── CLAUDE.md             # This file
+│   ├── __init__.py         ✅ Test package
+│   ├── test_envs.py        ✅ Random walk environment tests
+│   ├── test_agents_td.py   ✅ TD(0) & Monte Carlo agent tests  
+│   ├── test_agents_utils.py ✅ Agent utility tests
+│   ├── test_experiments.py ✅ Experiment framework tests
+│   ├── test_math_returns.py ✅ Mathematical utility tests
+│   └── test_mdp_core.py    ✅ MDP core component tests
+├── demo.py                 ✅ Working demo script
+└── CLAUDE.md               ✅ Project documentation
+```
+
+### Key Achievements
+
+✅ **Phase 1 Complete**: Solid MDP foundation with proper Sutton & Barto notation  
+✅ **Phase 2 Complete**: Working TD(0) vs Monte Carlo comparison on Random Walk  
+✅ **Ground Truth Integration**: Analytical solutions for validation  
+✅ **Comprehensive Testing**: 29 tests covering all implemented components  
+✅ **ASCII Visualization**: No external plotting dependencies needed  
+
+### Current Capabilities
+
+- **Random Walk Environment**: 5-state environment matching Sutton & Barto Example 6.2
+- **Policy Evaluation**: Both TD(0) and Monte Carlo methods implemented
+- **Value Function Convergence**: MSE tracking against ground truth values  
+- **Experiment Framework**: Automated comparison with configurable parameters
+- **Mathematical Foundation**: Proper TD error computation and return calculations
+
+### Demo Usage
+
+```bash
+# Run working demo comparing TD(0) vs Monte Carlo
+python demo.py
+
+# Run all tests
+poetry run python -m pytest
+
+# Run specific test suites  
+PYTHONPATH=. poetry run python -m pytest tests/test_envs.py -v
+PYTHONPATH=. poetry run python -m pytest tests/test_agents_td.py -v
 ```
 
 ## Technical Stack
@@ -185,48 +216,15 @@ python-dotenv = "^1.0.0"       # Configuration management
 - Keep tests simple, just core functionality checks
 - Prioritize working code over perfection for POCs
 
-## Current Implementation Status
-
-**Phases Complete:** 2/4 (Foundation + Policy Evaluation)  
-**Test Coverage:** 29 passing tests  
-**Lines of Code:** ~2000+ lines of clean, well-documented code
-
-### Key Achievements
-✅ **Full Sutton & Barto mathematical notation** implemented throughout  
-✅ **Working TD(0) vs Monte Carlo comparison** with convergence analysis  
-✅ **5-state Random Walk environment** with analytical ground truth  
-✅ **Comprehensive test suite** covering all components  
-✅ **ASCII plotting utilities** for visualization without external dependencies  
-✅ **Modular, extensible architecture** ready for control algorithms
-
-### Current Capabilities
-- **Policy Evaluation**: Complete TD(0) and Monte Carlo implementations
-- **Ground Truth Validation**: Analytical Bellman equation solutions
-- **Experiment Framework**: Automated comparison with MSE tracking  
-- **Visualization**: ASCII plots showing learning convergence
-- **Testing**: 29 comprehensive unit tests with 100% pass rate
-
-### Demo Usage
-```bash
-# Run working TD(0) vs Monte Carlo demo
-PYTHONPATH=. poetry run python demo.py
-
-# Run all tests  
-PYTHONPATH=. poetry run python -m pytest tests/ -v
-
-# Run policy evaluation experiment
-PYTHONPATH=. poetry run python experiments/policy_evaluation.py
-```
-
 ## Implementation Plan
 
-### Phase 1: Foundations (2-3 iterations, ~2 hours) ✅ COMPLETE
+### Phase 1: Foundations ✅ COMPLETE
 **Iteration 1.1**: MDP Core Components ✅
 - `mdp/core.py`: Basic MDP classes (State, Action, Transition)
 - `mdp/policy.py`: Policy representation and sampling
 - Basic episode generation helper
 
-**Iteration 1.2**: Mathematical Foundations ✅
+**Iteration 1.2**: Mathematical Foundations ✅  
 - `td_math/bellman.py`: Ground truth value function solver
 - `td_math/returns.py`: Return calculation utilities
 - Unit tests for core math operations
@@ -235,7 +233,7 @@ PYTHONPATH=. poetry run python experiments/policy_evaluation.py
 - `agents/base.py`: Abstract base agent class
 - `agents/utils.py`: Common utilities (ε-greedy, logging)
 
-### Phase 2: Policy Evaluation - Random Walk (3-4 iterations, ~3 hours) ✅ COMPLETE
+### Phase 2: Policy Evaluation - Random Walk ✅ COMPLETE
 **Iteration 2.1**: Environment Setup ✅
 - `envs/random_walk.py`: 5-state random walk implementation
 - Environment validation and visualization
@@ -250,10 +248,10 @@ PYTHONPATH=. poetry run python experiments/policy_evaluation.py
 
 **Iteration 2.4**: Evaluation & Comparison ✅
 - `experiments/policy_evaluation.py`: Run TD vs MC experiments
-- `experiments/plotting.py`: ASCII plotting utilities
+- `experiments/plotting.py`: ASCII visualization utilities
 - MSE plotting and convergence analysis
 
-### Phase 3: Control - Gridworld (3-4 iterations, ~3 hours)  
+### Phase 3: Control - Gridworld
 **Iteration 3.1**: Gridworld Environment
 - `envs/gridworld.py`: 4x4 deterministic grid implementation
 - State representation and action spaces
