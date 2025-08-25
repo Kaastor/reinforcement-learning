@@ -140,8 +140,8 @@ class ValueBasedAgent(RLAgent):
     """
     
     def __init__(self, mdp: MDP, alpha: float = 0.1, gamma: float = 1.0, name: str = "ValueAgent"):
-        super().__init__(mdp, alpha, gamma, name)
         self.V: Dict[State, float] = {}
+        super().__init__(mdp, alpha, gamma, name)
     
     def reset(self) -> None:
         """Reset value function."""
