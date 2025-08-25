@@ -103,8 +103,7 @@ claude "Update @CLAUDE.md with current project folder structure, any new command
 ```
 
 ```bash
-claude "Develop following part of the application from Phase 6:
-- Simple feedback-based document score adjustment and live re-ranking
+claude "Develop following part of the application from: []
 Create minimal tests and at the end of your work quickly summarize what you did and why and
 what was not accomplished if that is the case."
 ```
