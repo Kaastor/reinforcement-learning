@@ -1,0 +1,27 @@
+# poetry install
+
+[tool.poetry]
+name = "training-app"
+version = "0.1.0"
+description = "Training apps"
+authors = ["Your Name <you@example.com>"]
+
+packages = [
+  { include = "app" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.0"
+uvicorn = "^0.24.0"
+python-dotenv = "^1.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[tool.poetry.scripts]
+elevator = "app.app:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
