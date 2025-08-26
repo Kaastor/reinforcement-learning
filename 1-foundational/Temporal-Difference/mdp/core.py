@@ -9,7 +9,7 @@ This module provides the fundamental building blocks for Markov Decision Process
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Hashable
+from typing import Any, Hashable, Optional
 
 
 @dataclass(frozen=True)
@@ -55,7 +55,7 @@ class Transition:
     state: State
     action: Action
     reward: float
-    next_state: State | None
+    next_state: Optional[State]
     done: bool = False
     
     def __str__(self) -> str:

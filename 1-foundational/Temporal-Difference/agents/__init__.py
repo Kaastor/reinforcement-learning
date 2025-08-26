@@ -1,6 +1,8 @@
 """Agents module for reinforcement learning algorithms."""
 
 from .base import RLAgent, ValueBasedAgent, ActionValueBasedAgent
+from .sarsa import SarsaAgent
+from .q_learning import QLearningAgent
 from .utils import (
     EpsilonGreedyPolicy,
     DecaySchedules,
@@ -15,6 +17,8 @@ __all__ = [
     "RLAgent",
     "ValueBasedAgent", 
     "ActionValueBasedAgent",
+    "SarsaAgent",
+    "QLearningAgent",
     "EpsilonGreedyPolicy",
     "DecaySchedules",
     "LearningRateSchedule",

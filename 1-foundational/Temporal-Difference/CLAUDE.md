@@ -66,9 +66,9 @@ For environment implementation use chosen env from Gymnasium.
 
 ## Current Implementation Status
 
-**Phases Complete**: 2/4 (Foundation + Policy Evaluation)  
-**Test Coverage**: 29 passing tests  
-**Lines of Code**: ~2000+ lines of clean, well-documented code
+**Phases Complete**: 3/4 (Foundation + Policy Evaluation + Control)  
+**Test Coverage**: 47 passing tests  
+**Lines of Code**: ~3000+ lines of clean, well-documented code
 
 ## Project Structure
 
@@ -77,14 +77,14 @@ td_learning/
 ├── envs/
 │   ├── __init__.py         ✅ Environment package
 │   ├── random_walk.py      ✅ 5-state random walk (Sutton & Barto Ex 6.2)
-│   └── gridworld.py        ⏳ 4x4 gridworld (Phase 3)
+│   └── gridworld.py        ✅ 4x4 deterministic gridworld (Phase 3)
 ├── agents/
 │   ├── __init__.py         ✅ Agent package  
 │   ├── base.py            ✅ Abstract agent classes
 │   ├── td_zero.py         ✅ TD(0) policy evaluation
 │   ├── monte_carlo.py     ✅ MC policy evaluation baseline
-│   ├── sarsa.py           ⏳ On-policy control (Phase 3)
-│   ├── q_learning.py      ⏳ Off-policy control (Phase 3)
+│   ├── sarsa.py           ✅ On-policy SARSA(0) control (Phase 3)
+│   ├── q_learning.py      ✅ Off-policy Q-learning control (Phase 3)
 │   └── utils.py           ✅ ε-greedy, decay schedules
 ├── mdp/
 │   ├── __init__.py         ✅ MDP package
@@ -98,7 +98,7 @@ td_learning/
 │   ├── __init__.py         ✅ Experiment framework package
 │   ├── policy_evaluation.py ✅ TD vs MC comparison experiments
 │   ├── plotting.py         ✅ ASCII visualization utilities
-│   └── control_comparison.py ⏳ SARSA vs Q-learning (Phase 3)
+│   └── control_comparison.py ✅ SARSA vs Q-learning comparison (Phase 3)
 ├── tests/
 │   ├── __init__.py         ✅ Test package
 │   ├── test_envs.py        ✅ Random walk environment tests
@@ -106,8 +106,11 @@ td_learning/
 │   ├── test_agents_utils.py ✅ Agent utility tests
 │   ├── test_experiments.py ✅ Experiment framework tests
 │   ├── test_math_returns.py ✅ Mathematical utility tests
-│   └── test_mdp_core.py    ✅ MDP core component tests
-├── demo.py                 ✅ Working demo script
+│   ├── test_mdp_core.py    ✅ MDP core component tests
+│   ├── test_gridworld.py   ✅ Gridworld environment tests (Phase 3)
+│   └── test_control_agents.py ✅ SARSA & Q-learning agent tests (Phase 3)
+├── demo.py                 ✅ Working demo script (Phase 2)
+├── demo_control.py         ✅ Control methods demo script (Phase 3)
 └── CLAUDE.md               ✅ Project documentation
 ```
 
@@ -115,30 +118,40 @@ td_learning/
 
 ✅ **Phase 1 Complete**: Solid MDP foundation with proper Sutton & Barto notation  
 ✅ **Phase 2 Complete**: Working TD(0) vs Monte Carlo comparison on Random Walk  
+✅ **Phase 3 Complete**: SARSA and Q-learning control methods on 4x4 Gridworld
 ✅ **Ground Truth Integration**: Analytical solutions for validation  
-✅ **Comprehensive Testing**: 29 tests covering all implemented components  
+✅ **Comprehensive Testing**: 47 tests covering all implemented components  
 ✅ **ASCII Visualization**: No external plotting dependencies needed  
+✅ **Control Comparison**: Side-by-side on-policy vs off-policy analysis  
 
 ### Current Capabilities
 
 - **Random Walk Environment**: 5-state environment matching Sutton & Barto Example 6.2
+- **Gridworld Environment**: 4x4 deterministic grid for control experiments
 - **Policy Evaluation**: Both TD(0) and Monte Carlo methods implemented
+- **Control Methods**: SARSA(0) on-policy and Q-learning off-policy algorithms
 - **Value Function Convergence**: MSE tracking against ground truth values  
 - **Experiment Framework**: Automated comparison with configurable parameters
 - **Mathematical Foundation**: Proper TD error computation and return calculations
+- **Policy Analysis**: Greedy policy extraction and comparison metrics
 
 ### Demo Usage
 
 ```bash
-# Run working demo comparing TD(0) vs Monte Carlo
+# Run Phase 2 demo comparing TD(0) vs Monte Carlo on Random Walk
 python demo.py
 
+# Run Phase 3 demo comparing SARSA vs Q-learning on Gridworld
+python demo_control.py
+
 # Run all tests
-poetry run python -m pytest
+poetry run python -m pytest tests/
 
 # Run specific test suites  
 PYTHONPATH=. poetry run python -m pytest tests/test_envs.py -v
 PYTHONPATH=. poetry run python -m pytest tests/test_agents_td.py -v
+PYTHONPATH=. poetry run python -m pytest tests/test_control_agents.py -v
+PYTHONPATH=. poetry run python -m pytest tests/test_gridworld.py -v
 ```
 
 ## Technical Stack
@@ -215,64 +228,3 @@ python-dotenv = "^1.0.0"       # Configuration management
 - Around 5 min per cycle
 - Keep tests simple, just core functionality checks
 - Prioritize working code over perfection for POCs
-
-## Implementation Plan
-
-### Phase 1: Foundations ✅ COMPLETE
-**Iteration 1.1**: MDP Core Components ✅
-- `mdp/core.py`: Basic MDP classes (State, Action, Transition)
-- `mdp/policy.py`: Policy representation and sampling
-- Basic episode generation helper
-
-**Iteration 1.2**: Mathematical Foundations ✅  
-- `td_math/bellman.py`: Ground truth value function solver
-- `td_math/returns.py`: Return calculation utilities
-- Unit tests for core math operations
-
-**Iteration 1.3**: Base Agent Framework ✅
-- `agents/base.py`: Abstract base agent class
-- `agents/utils.py`: Common utilities (ε-greedy, logging)
-
-### Phase 2: Policy Evaluation - Random Walk ✅ COMPLETE
-**Iteration 2.1**: Environment Setup ✅
-- `envs/random_walk.py`: 5-state random walk implementation
-- Environment validation and visualization
-
-**Iteration 2.2**: TD(0) Implementation ✅
-- `agents/td_zero.py`: TD(0) policy evaluation agent
-- Basic learning loop and value function updates
-
-**Iteration 2.3**: Monte Carlo Baseline ✅
-- `agents/monte_carlo.py`: MC policy evaluation for comparison
-- Episode-based value function estimation
-
-**Iteration 2.4**: Evaluation & Comparison ✅
-- `experiments/policy_evaluation.py`: Run TD vs MC experiments
-- `experiments/plotting.py`: ASCII visualization utilities
-- MSE plotting and convergence analysis
-
-### Phase 3: Control - Gridworld
-**Iteration 3.1**: Gridworld Environment
-- `envs/gridworld.py`: 4x4 deterministic grid implementation
-- State representation and action spaces
-
-**Iteration 3.2**: SARSA Implementation
-- `agents/sarsa.py`: On-policy SARSA(0) control
-- ε-greedy policy with decay
-
-**Iteration 3.3**: Q-Learning Implementation  
-- `agents/q_learning.py`: Off-policy Q-learning control
-- Action-value function updates
-
-**Iteration 3.4**: Control Comparison
-- `experiments/control_comparison.py`: SARSA vs Q-learning
-- Performance metrics and learning curves
-
-### Phase 4: Analysis & Validation (1-2 iterations, ~2 hours)
-**Iteration 4.1**: Ground Truth Validation
-- Implement analytical solutions for both environments
-- Cross-validation of learned vs theoretical values
-
-**Iteration 4.2**: Final Analysis
-- Comprehensive comparison plots
-- Bias-variance analysis documentation

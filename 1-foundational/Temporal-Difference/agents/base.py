@@ -168,8 +168,8 @@ class ActionValueBasedAgent(RLAgent):
     """
     
     def __init__(self, mdp: MDP, alpha: float = 0.1, gamma: float = 1.0, name: str = "QAgent"):
-        super().__init__(mdp, alpha, gamma, name)
         self.Q: Dict[tuple[State, Action], float] = {}
+        super().__init__(mdp, alpha, gamma, name)
     
     def reset(self) -> None:
         """Reset action-value function."""
